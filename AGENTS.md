@@ -53,6 +53,8 @@ Label evidence as verified current behavior, official documented behavior, obser
 
 The current baseline is ETS2 1.60. Compatibility is version-specific; claim no other version until explicitly validated. For future supported versions, prefer version-specific Workshop packages over blindly reusing central definitions.
 
+The verified ETS2 1.60.1.7 `def/map_data.sii` does not explicitly assign any of the seven candidate `navigation_time_*` fields, although their exact names are present in the shipped game executable. Treat their effective internal defaults as unknown: engine recognition is not evidence of a numeric stock value. See `docs/research/ets2-1.60-navigation-baseline.md`.
+
 ## Repository and validation rules
 
 - Inspect the repository before implementing and preserve user files.
