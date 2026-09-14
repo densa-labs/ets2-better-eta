@@ -1,0 +1,11 @@
+{
+  "profile": "road-speed-usage-high",
+  "display_name": "Better ETA M2 - HIGH 1.00",
+  "expected_source_sha256": "9433ef7c8d120509ee641f6d1643966ddc99effe1f237ec9c6b34025bdb72473",
+  "assignments": [
+    {
+      "field": "navigation_time_road_max_speed_usage",
+      "value": "1.00"
+    }
+  ]
+}
