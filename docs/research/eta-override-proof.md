@@ -33,11 +33,19 @@ Use the disposable local profile `MOD TESTING`. Keep the truck, starting save, r
 
 | Condition | Explicit field/value | Route | Distance | Travel time / ETA | Route identity | Game-log status |
 |---|---|---|---:|---|---|---|
-| Vanilla | no data assignment | not observed | not observed | not observed | not observed | not run |
-| LOW | `navigation_time_road_max_speed_usage: 0.50` | not observed | not observed | not observed | not observed | not enabled |
-| HIGH | `navigation_time_road_max_speed_usage: 1.00` | not observed | not observed | not observed | not observed | not enabled |
+| Vanilla | no data assignment | Zürich → Milan (Libellula), Motor Oil | 385 km map / 386 km Route Advisor | 5 h 36 min; Mon 22:57 → Tue 4:33 | Recorded map route through Switzerland into northern Italy | `MOD TESTING`: 0 active mods; map/navigation loaded |
+| LOW | `navigation_time_road_max_speed_usage: 0.50` | Zürich → Milan (Libellula), Motor Oil | 385 km map / 386 km Route Advisor | 9 h 16 min; Mon 23:02 → Tue 8:18 | Map route visually matches Vanilla | One active local LOW mod mounted; map/navigation and route generation loaded; no unknown-attribute or duplicate-unit message observed |
+| HIGH | `navigation_time_road_max_speed_usage: 1.00` | Zürich → Milan (Libellula), Motor Oil | 385 km map / 386 km Route Advisor | 5 h 08 min; Mon 22:57 → Tue 4:05 | Map route visually matches Vanilla and LOW | One active local HIGH mod mounted; map/navigation and route generation loaded; no unknown-attribute or duplicate-unit message observed |
 
 The LOW and HIGH values are deliberately separated positive probes. They are not production recommendations and are not claims about the vanilla default.
+
+Vanilla evidence is from the user's map and Route Advisor screenshots captured around 16:44 local time. The same ETS2 log was created at 16:40:09, recorded 0 active mods at elapsed 00:00:31, and did not mount LOW until elapsed 00:05:04 (about 16:45:14), after both screenshots. Thus the later accidental LOW activation in that log is excluded from the Vanilla observation. The map displays 385 km while the Route Advisor displays 386 km; record both rather than treating this one-kilometre display difference as a route change. The separate 20 h 11 min figure is the job deadline, not predicted travel time.
+
+LOW evidence is from the user's map and Route Advisor screenshots captured around 16:48 local time, after the log mounted exactly one active local mod, `better_eta_m2_low`, at elapsed 00:05:04. The selected map route and both distance displays match Vanilla; the truck is shown stationary at 0 km/h. LOW's native trip-time display is 3 h 40 min longer than Vanilla's. The in-game clock advanced five minutes between screenshots, so compare predicted trip time rather than absolute arrival clock alone. The modded log contains no unknown-attribute or duplicate-unit message; it does contain map/profile warnings also seen during the Vanilla portion, which should not be silently attributed to this field assignment.
+
+HIGH evidence is from the user's Route Advisor and map screenshots captured around 16:51 local time. The same log mounted exactly one active local mod, `better_eta_m2_high`, at elapsed 00:10:22 (about 16:50:31), before the screenshots. LOW and HIGH loaded the same manual save slot `save/3/game.sii`. Both map screenshots show the same Zürich-to-Milan red route and 385 km distance; their Route Advisors show 386 km. No extra destination or waypoint is visible. HIGH's trip-time prediction is 4 h 08 min shorter than LOW's and 28 min shorter than Vanilla's. Its in-game clock matches Vanilla at Mon 22:57, and the truck is stationary at 0 km/h.
+
+The cumulative game log contains recurring city, ferry, DLC, and prefab warnings/errors in both the Vanilla and modded phases. A pre-existing native telemetry plugin also loaded throughout the same game session; it was not used by Better ETA and its state did not vary between conditions. Neither modded phase shows an unknown-attribute warning, duplicate-unit error, or navigation failure attributable to the experimental assignment. The game does not print a positive field-by-field acceptance message; acceptance is inferred from successful mod mount/map load and the monotonic native ETA response. The raw log and screenshots are retained only in ignored local development input, not in this repository document.
 
 ### Short live protocol
 
@@ -50,14 +58,14 @@ For each modded run, confirm that the log shows the directory mod mounted and co
 
 ## Result
 
-**D. Live validation could not yet be completed.**
+**A. `navigation_time_road_max_speed_usage` is causally active in ETS2 1.60.1.7 and can be overridden by a normal data-only mod.**
 
-After correcting the generated manifest's SII unit identifier, a fresh `1.60.1.7s` launch discovered both local directory packages without manifest parsing errors. However, the available automated desktop input could not reliably activate Mod Manager controls in ETS2. Neither experiment was enabled, so `map_data.sii` was not parsed from the test mod and field acceptance, ETA response, and route isolation remain unverified. Prepared artifacts and package discovery do not prove the native mechanism. Replace this result only with direct observed evidence.
+The two positive experimental assignments were activated one at a time on the same test profile and same manual save. With the selected route and distance unchanged, `0.50` predicted 9 h 16 min while `1.00` predicted 5 h 08 min. This 4 h 08 min monotonic separation in ETS2's native Route Advisor is far larger than display rounding. Vanilla lay between them at 5 h 36 min. This proves a causal response for this field on this route; it does not identify the hidden vanilla default or establish an accurate production value.
 
 ## Architecture implication
 
-The central Better ETA mechanism is not yet experimentally proven. Do not begin tuning or infer the hidden vanilla default until the live LOW/HIGH comparison succeeds.
+The central Better ETA v0.1 mechanism—an ordinary mod owning `def/map_data.sii` and changing a native `navigation_time_*` ETA assumption while stock routing and Route Advisor remain in use—is experimentally proven on one controlled route. The matching route geometry and distance support, but do not exhaustively prove, ETA-only behavior across all possible routes. No tuning or accuracy-improvement claim follows from this causality proof.
 
 ## Milestone status
 
-**INCOMPLETE — LIVE CAUSAL VALIDATION PENDING**
+**COMPLETE — NATIVE OVERRIDE CAUSALITY PROVEN FOR ONE FIELD AND ROUTE**
